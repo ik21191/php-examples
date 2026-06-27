@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Intermediate Processing Page Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; margin-top: 50px; }
+        .card { border: 1px solid #ccc; padding: 30px; border-radius: 8px; width: 350px; text-align: center; }
+        .hidden { display: none; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        button { background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        input[type="text"] { width: 90%; padding: 8px; margin: 10px 0 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- VIEW 1: The Initial Form -->
+        <div id="form-view">
+            <h2>Submit Request</h2>
+            <form id="my-form">
+                <label for="username">Your Name:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit" id="submit-btn">Process Data</button>
+            </form>
+        </div>
+
+        <!-- VIEW 2: The Intermediate Loading Page -->
+        <div id="loading-view" class="hidden">
+            <h2>Processing Request...</h2>
+            <p>Please wait while we sync with the server.</p>
+            <div class="spinner"></div>
+        </div>
+
+        <!-- VIEW 3: Final Response Page -->
+        <div id="response-view" class="hidden">
+            <h2 style="color: #2ecc71;">Success!</h2>
+            <p id="success-message"></p>
+            <button onclick="window.location.reload();">Submit Another</button>
+        </div>
+    </div>
+
+    <!-- 2. FRONTEND JAVASCRIPT CONTROLLER -->
+    <script>
+        document.getElementById('my-form').addEventListener('submit', function(event) {
+            // Prevent standard form submission which reloads the page
+            event.preventDefault(); 
+
+            // Target HTML view blocks
+            const formView = document.getElementById('form-view');
+            const loadingView = document.getElementById('loading-view');
+            const responseView = document.getElementById('response-view');
+            const successMessage = document.getElementById('success-message');
+
+            // STEP 1: Instantly hide the form and show the intermediate loading view
+            formView.classList.add('hidden');
+            loadingView.classList.remove('hidden');
+
+            // STEP 2: Package form data for transmission
+            const formData = new FormData(this);
+            formData.append('action', 'process'); // Identifies request type to PHP
+
+            // STEP 3: Dispatch asynchronous request via the Fetch API
+            fetch('process.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) // Parse the JSON data sent from PHP
+            .then(data => {
+                // STEP 4: Hide intermediate view and render final response status
+                loadingView.classList.add('hidden');
+                if (data.status === 'success') {
+                    successMessage.innerText = data.message;
+                    responseView.classList.remove('hidden');
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    formView.classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loadingView.classList.add('hidden');
+                formView.classList.remove('hidden');
+                alert('A network error occurred.');
+            });
+        });
+    </script>
+</body>
+</html>

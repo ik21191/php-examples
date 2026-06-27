@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Email Template</title>
+    <style>
+        /* Mobile responsive overrides for clients that support media queries */
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .fluid-img {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            .button {
+                display: block !important;
+                width: auto !important;
+                text-align: center !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: Arial, sans-serif; -webkit-text-size-adjust: none;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f7; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container Table -->
+                <table border="0" cellpadding="0" cellspacing="0" width="600" class="email-container" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="background-color: #4f46e5; padding: 30px 20px;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 0.5px;">{{TITLE}}</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 40px 30px; color: #333333; font-size: 16px; line-height: 1.6;">
+                            <p style="margin-top: 0;">Hi <strong>{{NAME}}</strong>,</p>
+                            <p>{{BODY_TEXT}}</p>
+                            
+                            <!-- Call to Action Button -->
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+                                <tr>
+                                    <td align="center" bgcolor="#4f46e5" style="border-radius: 4px;">
+                                        <a href="{{CTA_URL}}" class="button" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 4px; padding: 12px 24px; border: 1px solid #4f46e5; display: inline-block; font-weight: bold;">
+                                            {{CTA_TEXT}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin-bottom: 0;">Best regards,<br>The Dev Team</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="background-color: #f8fafc; padding: 20px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 8px 0;">You are receiving this automated system update notification.</p>
+                            <p style="margin: 0;">&copy; 2026 Your Company. All rights reserved.</p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
