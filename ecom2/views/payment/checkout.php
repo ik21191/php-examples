@@ -16,6 +16,11 @@
             <!-- Hidden dynamic value parsing parameters -->
             <input type="hidden" name="mock_payment_id" value="pay_mock_<?= bin2hex(random_bytes(6)); ?>">
 
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 tracking-wider mb-1">Shipping & Delivery Address (India Only)</label>
+                <textarea name="shipping_address" rows="2" required placeholder="Enter house number, street name, city, state, pincode..." class="w-full text-sm px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/50"></textarea>
+            </div>
+
             <!-- Simulated UPI Payment Option -->
             <label class="flex items-center justify-between p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50/50 hover:border-blue-300 transition group">
                 <div class="flex items-center space-x-3">

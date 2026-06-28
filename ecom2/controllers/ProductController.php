@@ -10,16 +10,20 @@ class ProductController {
     }
 
     public function details() {
+        require_once __DIR__ . '/../models/Review.php'; // Pull in model dependencies hook
+        
         $productId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         $product = Product::getById($productId);
 
-        // If the item doesn't exist or parameter array is empty, redirect safely to home catalog
         if (!$product) {
             header('Location: index.php');
             exit;
         }
 
-        // Pass control control variables directly over to details layout engine
+        // Query historical loop review datasets metrics arrays state variables 
+        $reviews = Review::getByProductId($productId);
+        $ratingStats = Review::getAverageRating($productId);
+
         $view = __DIR__ . '/../views/products/details.php';
         require_once __DIR__ . '/../views/layout/header.php';
     }
