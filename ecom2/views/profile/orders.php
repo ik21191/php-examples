@@ -35,6 +35,11 @@
                             <span class="font-mono bg-white border border-gray-200 text-gray-700 px-2 py-0.5 rounded text-[11px] font-semibold">
                                 <?= htmlspecialchars($order['mock_payment_id']); ?>
                             </span>
+
+                            <a href="index.php?controller=invoice&action=download&id=<?= $order['id']; ?>"
+                                class="inline-flex items-center text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-100 hover:bg-blue-100 px-2 py-1 rounded transition tracking-wide shadow-xs">
+                                📄 Download GST Invoice (PDF)
+                            </a>
                         </div>
                     </div>
 

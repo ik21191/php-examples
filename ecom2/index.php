@@ -22,6 +22,12 @@ switch ($controllerParam) {
     case 'profile':
         $controllerName = 'ProfileController';
         break;
+    case 'review':
+        $controllerName = 'ReviewController';
+        break;
+    case 'invoice':
+        $controllerName = 'InvoiceController';
+        break;
     case 'admin':
         $controllerName = 'AdminController';
         break;

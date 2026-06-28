@@ -31,6 +31,7 @@ class AdminController {
             $actionType = $_POST['action_type'] ?? '';
             $name  = trim($_POST['name'] ?? '');
             $price = trim($_POST['price'] ?? 0);
+            $description = trim($_POST['description'] ?? '');
             $imagePath = $_POST['existing_image'] ?? ''; 
 
             if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {

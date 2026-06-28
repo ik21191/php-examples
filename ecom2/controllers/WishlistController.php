@@ -32,4 +32,23 @@ class WishlistController {
         header("Location: " . $referrer);
         exit;
     }
+
+    public function count() {
+        // Return 0 if the user session is unauthorized or not logged in
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['count' => 0]);
+            exit;
+        }
+
+        // Fetch user's active favorite database identifiers
+        $favoriteIds = Wishlist::getUserWishlistIds($_SESSION['user_id']);
+        $totalCount = is_array($favoriteIds) ? count($favoriteIds) : 0;
+
+        // Clear output buffer and stream strict JSON formatting
+        if (ob_get_length()) ob_end_clean();
+        header('Content-Type: application/json');
+        echo json_encode(['count' => $totalCount]);
+        exit;
+    }
 }

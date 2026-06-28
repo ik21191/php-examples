@@ -44,6 +44,7 @@ class PaymentController {
 
         $mockPaymentId = $_POST['mock_payment_id'] ?? '';
         $paymentMethod = $_POST['payment_method'] ?? 'unknown';
+        $shippingAddress = trim($_POST['shipping_address'] ?? 'Customer Address Not Supplied');
 
         // Extract and aggregate total amount from current operational session state
         $totalAmount = 0;
@@ -54,22 +55,24 @@ class PaymentController {
         // Validate the incoming simulation token format
         if (strpos($mockPaymentId, 'pay_mock_') === 0) {
             
-            // Dispatch parameters out straight into our transactional Database storage model
-            $orderSaved = Order::saveOrder(
-                $_SESSION['user_id'],
-                $mockPaymentId,
-                $paymentMethod,
-                $totalAmount,
-                $_SESSION['cart']
-            );
+            // Rewrite your Order::saveOrder model database write to capture address metrics strings
+            $db = Database::getConnection();
+            $db->beginTransaction();
+            
+            // Relational SQL insert statement adapted dynamically to parse shipping address maps
+            $stmt = $db->prepare("INSERT INTO orders (user_id, mock_payment_id, payment_method, total_amount, shipping_address) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$_SESSION['user_id'], $mockPaymentId, $paymentMethod, $totalAmount, $shippingAddress]);
+            $orderId = $db->lastInsertId();
 
-            if ($orderSaved) {
-                $_SESSION['cart'] = []; // Clear active shopping cart state upon successful database write
-                header('Location: index.php?controller=payment&action=success');
-                exit;
-            } else {
-                die("Error: Could not permanently register order logging variables into MySQL database.");
+            $itemStmt = $db->prepare("INSERT INTO order_items (order_id, product_id, product_name, price, quantity) VALUES (?, ?, ?, ?, ?)");
+            foreach ($_SESSION['cart'] as $productId => $item) {
+                $itemStmt->execute([$orderId, $productId, $item['name'], $item['price'], $item['quantity']]);
             }
+            
+            $db->commit();
+            $_SESSION['cart'] = [];
+            header('Location: index.php?controller=payment&action=success');
+            exit;
         } else {
             header('Location: index.php?controller=payment&action=cancel');
             exit;
