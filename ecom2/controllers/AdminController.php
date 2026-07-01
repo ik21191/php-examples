@@ -71,7 +71,6 @@ class AdminController {
             // Database persistence logic execution block
             if (strpos($message, 'Error') === false) {
                 if ($actionType === 'create') {
-                    if (empty($imagePath)) { $imagePath = 'https://unsplash.com'; }
                     if (Product::create($name, $price, $imagePath)) {
                         $message = 'Product created successfully!';
                     }
