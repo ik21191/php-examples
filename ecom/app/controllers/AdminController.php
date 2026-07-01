@@ -8,7 +8,7 @@ class AdminController {
     
     private function checkAuth() {
         if (!isset($_SESSION['user_id'])) {
-            header('Location: ogin');
+            header('Location: /customer/login-form');
             exit;
         }
     }

@@ -26,6 +26,8 @@ class AuthController {
         } else {
             $error = 'Invalid email or password context.';
         }
+        $view = __DIR__ . '/../views/auth/login.php';
+        require_once __DIR__ . '/../views/layout/header.php';
     }
 
     public function registerForm() {
