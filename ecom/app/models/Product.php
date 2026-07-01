@@ -19,21 +19,21 @@ class Product
         return $stmt->fetch() ?: null;
     }
 
-    public static function create(string $name, float $price, string $description, string $image)
+    public static function create(string $name, float $price, string $description, string $image, int $stock = 10)
     {
         $db = Database::getConnection();
-        $stmt = $db->prepare("INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$name, $price, $description, $image]);
+        $stmt = $db->prepare("INSERT INTO products (name, price, description, image, stock) VALUES (?, ?, ?, ?, ?)");
+        return $stmt->execute([$name, $price, $description, $image, $stock]);
     }
 
-    public static function update(int $id, string $name, float $price, string $description, string $image)
+    public static function update(int $id, string $name, float $price, string $description, string $image, int $stock)
     {
         $db = Database::getConnection();
 
         // IF NO NEW IMAGE FILE WAS SUPPLIED: Simply patch text elements
         if (empty($image)) {
-            $stmt = $db->prepare("UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?");
-            return $stmt->execute([$name, $price, $description, $id]);
+            $stmt = $db->prepare("UPDATE products SET name = ?, price = ?, description = ?, stock =? WHERE id = ?");
+            return $stmt->execute([$name, $price, $description, $stock, $id]);
         }
 
         // IF A NEW IMAGE IS PROVIDED: Clean up the old image file before tracking the new path
@@ -58,19 +58,19 @@ class Product
         }
 
         // Save the new product info along with the updated image path string
-        $stmt = $db->prepare("UPDATE products SET name = ?, price = ?, description = ?, image = ? WHERE id = ?");
-        return $stmt->execute([$name, (float)$price, $description, $image, (int)$id]);
+        $stmt = $db->prepare("UPDATE products SET name = ?, price = ?, description = ?, image = ?, stock = ?  WHERE id = ?");
+        return $stmt->execute([$name, (float)$price, $description, $image, $stock, (int)$id]);
     }
 
 
-    public static function delete($id)
+    public static function delete(int $id)
     {
         $db = Database::getConnection();
 
         try {
             // 1. Fetch the product details to identify its current image file path notation
             $stmt = $db->prepare("SELECT image FROM products WHERE id = ?");
-            $stmt->execute([(int)$id]);
+            $stmt->execute([$id]);
             $product = $stmt->fetch();
 
             if ($product && !empty($product['image'])) {
@@ -97,5 +97,11 @@ class Product
             error_log("Failed to clean up file asset or delete product: " . $e->getMessage());
             return false;
         }
+    }
+
+    public static function depleteStock(int $productId, int $quantity) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?");
+        return $stmt->execute([(int)$quantity, (int)$productId]);
     }
 }

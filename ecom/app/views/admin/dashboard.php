@@ -1,5 +1,6 @@
 <!-- views/admin/dashboard.php -->
 <div class="max-w-6xl mx-auto">
+    <!-- Top Header Layout Panel Area -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-3xl font-black text-gray-900 tracking-tight">Analytics Dashboard</h1>
@@ -9,6 +10,22 @@
             <span class="h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
             <span>Live Audit Console</span>
         </span>
+    </div>
+
+    <div class="bg-white border border-gray-100 p-4 rounded-2xl shadow-sm mb-8 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex items-center space-x-2 text-sm text-gray-500 font-medium">
+            <span>🛠️ Administrative Actions Shortcut Matrix:</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <!-- CRITICAL PRODUCT PAGE LINK INJECTION HOOK -->
+            <a href="/admin/fetch-all-products" class="inline-flex items-center space-x-1.5 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl transition shadow-sm">
+                <span>📦 Manage Products Catalog CRUD</span>
+                <span class="text-sm">→</span>
+            </a>
+            <a href="/" class="inline-flex items-center text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl transition">
+                🌐 View Public Storefront
+            </a>
+        </div>
     </div>
 
     <!-- 1. KPI Metric Grid Layout Cards Panel Layer -->
@@ -45,7 +62,6 @@
 
     <!-- 2. Dual Graph Layout Visual Elements Matrix -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        
         <!-- Chronological Sales Trend Chart Area Container Canvas (2/3 width) -->
         <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h3 class="text-md font-bold text-gray-800 mb-4">Revenue & Transaction Volume Over Time</h3>
@@ -68,7 +84,7 @@
 </div>
 
 <!-- Load highly compatible UMD Chart.js layout framework via unblocked CDN mirror -->
-
+<script src="/js/chart.umd.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -155,4 +171,3 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-<script src="/chart.umd.js"></script>

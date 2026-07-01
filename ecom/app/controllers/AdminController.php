@@ -33,6 +33,7 @@ class AdminController {
             $name  = trim($_POST['name'] ?? '');
             $price = trim($_POST['price'] ?? 0);
             $description = trim($_POST['description'] ?? '');
+            $stock = isset($_POST['stock']) ? (int)$_POST['stock'] : 10; // NEW: Capture stock numerical data inputs
             $imagePath = $_POST['existing_image'] ?? ''; 
 
             if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
@@ -76,12 +77,12 @@ class AdminController {
                     { 
                         $imagePath = 'https://unsplash.com'; 
                     }
-                    if (Product::create($name, (float)$price, $description, $imagePath)) {
+                    if (Product::create($name, (float)$price, $description, $imagePath, $stock)) {
                         $message = 'Product created successfully!';
                     }
                 } elseif ($actionType === 'update') {
                     $id = (int)($_POST['product_id'] ?? 0);
-                    if (Product::update($id, $name, $price, $description, $imagePath)) {
+                    if (Product::update($id, $name, $price, $description, $imagePath, $stock)) {
                         $message = 'Product modified successfully!';
                     }
                 }

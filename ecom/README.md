@@ -1,7 +1,9 @@
-# aitechkart.com
-A custom website and mobile development company.
+# E-Commerce
+A sample demo application showing the E-Commerce order flow.
 
 ## Steps to run this application
+
+- Create a `.env` file and put in the root folder of this application. For your convenience a `.env-sample` is placed in the `root` folder. In the production server replace sample value with the actual one. In case you add a new property in `.env` file, then make sure to add a placeholder in `.env-sample` file.
 
 ### Prerequisite
 
@@ -35,9 +37,6 @@ To install any package go to `php` folder and install the package there and use 
 
 - composer require phpmailer/phpmailer
 - composer require monolog/monolog
-
-## Secrets
-Create a `.env` file and put in the root folder of this application. For your convenience a `.env-sample` is placed in the `root` folder. In the production server replace sample value with the actual one. In case you add a new property in `.env` file, then make sure to add a placeholder in `.env-sample` file.
 
 ## PDO MySql Error
 The error **Uncaught PDOException: could not find driver** means, PHP is trying to connect to a database using **PHP Data Objects (PDO)**, but the specific database extension is either not installed or not enabled in your PHP configuration.

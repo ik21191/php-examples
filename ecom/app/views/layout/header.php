@@ -27,6 +27,9 @@
                 </a>
 
                 <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="/admin/dashboard" class="text-sm font-bold bg-blue-50 text-blue-600 border border-blue-100 px-3 py-1.5 rounded-xl hover:bg-blue-100 transition flex items-center space-x-1">
+                        <span>🛠️ Admin Panel</span>
+                    </a>
                     <a href="/customer/wishlist" class="relative inline-flex items-center text-sm font-medium text-gray-600 hover:text-gray-900 transition mr-2 py-1">
                         <span>❤️ Wishlist</span>
                         <!-- AJAX Dynamic Target Badge Box Element -->

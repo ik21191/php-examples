@@ -2,6 +2,7 @@
 require __DIR__ . "/../../app/bootstrap/bootstrap.php";
 require_once PROJECT_ROOT_PATH . "/app/db/config.php";
 require_once __DIR__ . '/../models/Order.php';
+require_once __DIR__ . '/../models/Product.php';
 
 class PaymentController {
     private $config;
@@ -68,6 +69,7 @@ class PaymentController {
             $itemStmt = $db->prepare("INSERT INTO order_items (order_id, product_id, product_name, price, quantity) VALUES (?, ?, ?, ?, ?)");
             foreach ($_SESSION['cart'] as $productId => $item) {
                 $itemStmt->execute([$orderId, $productId, $item['name'], $item['price'], $item['quantity']]);
+                Product::depleteStock($productId, $item['quantity']);
             }
             
             $db->commit();

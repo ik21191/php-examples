@@ -42,6 +42,12 @@
                 </div>
 
                 <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 tracking-wider mb-1">Warehouse Stock</label>
+                        <input type="number" id="form-stock" name="stock" required min="0" placeholder="10" 
+                               class="w-full text-sm px-3 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/50">
+                    </div>
+
+                <div>
                     <label class="block text-xs font-bold uppercase text-gray-400 tracking-wider mb-1">Product Description</label>
                     <textarea id="form-description" name="description" rows="3" required placeholder="Type rich technical overview features here..."
                         class="w-full text-sm px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/50"></textarea>
@@ -49,7 +55,7 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase text-gray-400 tracking-wider mb-1">Upload Product Image (.png, .jpg)</label>
-                    <input type="file" id="form-image-file" name="product_image" required accept="image/png, image/jpeg, image/jpg"
+                    <input type="file" id="form-image-file" name="product_image" accept="image/png, image/jpeg, image/jpg"
                         class="w-full text-sm px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50/50 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     <p id="edit-img-note" class="hidden text-[11px] text-gray-400 mt-1">* Leave blank to retain existing file.</p>
                     <p id="js-upload-error" class="hidden text-xs font-bold text-red-500 mt-1.5"></p>
@@ -84,6 +90,7 @@
                                 <th class="px-6 py-3.5">Title Name</th>
                                 <th class="px-6 py-3.5 max-w-[200px]">Description</th>
                                 <th class="px-6 py-3.5">Price</th>
+                                <th class="px-6 py-3.5">Stock Level</th>
                                 <th class="px-6 py-3.5 text-right">Actions Operations</th>
                             </tr>
                         </thead>
@@ -101,6 +108,15 @@
                                     </td>
                                     <td class="px-6 py-3 font-bold text-gray-900">
                                         ₹<?= number_format($p['price'], 2); ?>
+                                    </td>
+                                    <td class="px-6 py-3 font-semibold whitespace-nowrap">
+                                        <?php if ($p['stock'] <= 0): ?>
+                                            <span class="inline-block bg-red-50 text-red-600 border border-red-100 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">Out of Stock 🚨</span>
+                                        <?php elseif ($p['stock'] <= 3): ?>
+                                            <span class="inline-block bg-amber-50 text-amber-600 border border-amber-100 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">Low Stock (<?= $p['stock']; ?> Left) ⚠️</span>
+                                        <?php else: ?>
+                                            <span class="inline-block bg-green-50 text-green-700 border border-green-100 px-2 py-1 rounded text-xs font-bold"><?= $p['stock']; ?> Available</span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-3 text-right space-x-3 whitespace-nowrap">
                                         <button onclick="populateEditForm(<?= htmlspecialchars(json_encode($p)); ?>)"
@@ -130,99 +146,133 @@
     </div>
 </div>
 
+<!-- Place this complete block at the very bottom of views/admin/products.php -->
 <script>
-    // Self-executing isolation block to handle search queries cleanly without errors
-    (function() {
-        function initSearchEngine() {
-            var searchInput = document.getElementById('catalog-search-bar');
-            if (!searchInput) return;
+    // --- 1. GLOBAL SCOPE FORM POPULATION (Restores the Edit Link Functionality) ---
+    window.populateEditForm = function(product) {
+        try {
+            document.getElementById('form-title').innerText = 'Modify Existing Product';
+            document.getElementById('action_type').value = 'update';
+            document.getElementById('product_id').value = product.id;
+            document.getElementById('existing_image').value = product.image;
+            
+            document.getElementById('form-name').value = product.name;
+            document.getElementById('form-price').value = product.price;
+            document.getElementById('form-stock').value = product.stock !== undefined ? product.stock : 10;
+            document.getElementById('form-description').value = product.description || '';
+            
+            document.getElementById('form-image-file').required = false;
+            
+            var note = document.getElementById('edit-img-note');
+            if (note) note.classList.remove('hidden');
+            
+            document.getElementById('form-submit-btn').innerText = 'Save Modifications';
+            
+            var cancelBtn = document.getElementById('form-cancel-btn');
+            if (cancelBtn) cancelBtn.classList.remove('hidden');
+            
+            document.getElementById('form-title').scrollIntoView({ behavior: 'smooth' });
+        } catch(err) { 
+            console.error("Edit Form Population Error:", err); 
+        }
+    };
 
-            searchInput.addEventListener('input', function(e) {
-                var queryText = e.target.value.toLowerCase().trim();
-                var productRows = document.querySelectorAll('.product-row');
-                var visibleRowCount = 0;
+    // --- 2. GLOBAL SCOPE FORM RESET (Clears Form Fields Back to Creation Mode) ---
+    window.resetFormState = function() {
+        try {
+            document.getElementById('form-title').innerText = 'Add New Product';
+            document.getElementById('action_type').value = 'create';
+            document.getElementById('product_id').value = '';
+            document.getElementById('existing_image').value = '';
+            
+            document.getElementById('form-name').value = '';
+            document.getElementById('form-price').value = '';
+            document.getElementById('form-stock').value = ''; 
+            document.getElementById('form-description').value = '';
+            
+            document.getElementById('form-image-file').value = '';
+            document.getElementById('form-image-file').required = true;
+            
+            var note = document.getElementById('edit-img-note');
+            if (note) note.classList.add('hidden');
+            
+            var errDisplay = document.getElementById('js-upload-error');
+            if (errDisplay) errDisplay.classList.add('hidden');
+            
+            var submitBtn = document.getElementById('form-submit-btn');
+            if (submitBtn) {
+                submitBtn.innerText = 'Insert Product Row';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            
+            var cancelBtn = document.getElementById('form-cancel-btn');
+            if (cancelBtn) cancelBtn.classList.add('hidden');
+        } catch(err) { 
+            console.error("Form Reset Error:", err); 
+        }
+    };
 
-                productRows.forEach(function(row) {
-                    var productName = row.getAttribute('data-name') || '';
-                    if (productName.indexOf(queryText) !== -1) {
-                        row.style.setProperty('display', '', 'important');
-                        visibleRowCount++;
-                    } else {
-                        row.style.setProperty('display', 'none', 'important');
-                    }
-                });
-                var emptyStateContainer = document.getElementById('search-empty-state');
-                var tableContainer = document.getElementById('inventory-table');
-                if (visibleRowCount === 0) {
-                    if (emptyStateContainer) emptyStateContainer.classList.remove('hidden');
-                    if (tableContainer) tableContainer.classList.add('hidden');
+    // --- 3. BULLETPROOF LIVE CATALOG SEARCH ENGINE ---
+    function runCatalogSearch() {
+        var searchInput = document.getElementById('catalog-search-bar');
+        if (!searchInput) return;
+
+        searchInput.addEventListener('input', function(e) {
+            var queryText = e.target.value.toLowerCase().trim();
+            var productRows = document.querySelectorAll('.product-row');
+            var visibleRowCount = 0;
+
+            productRows.forEach(function(row) {
+                var productName = row.getAttribute('data-name') || '';
+                if (productName.indexOf(queryText) !== -1) {
+                    row.style.setProperty('display', '', 'important');
+                    visibleRowCount++;
                 } else {
-                    if (emptyStateContainer) emptyStateContainer.classList.add('hidden');
-                    if (tableContainer) tableContainer.classList.remove('hidden');
+                    row.style.setProperty('display', 'none', 'important');
                 }
             });
-        }
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSearchEngine);
-        } else {
-            initSearchEngine();
-        }
-    })();
 
-    // Client-side local file size validator listener (2MB limit)
-    document.getElementById('form-image-file').addEventListener('change', function(e) {
-        var file = this.files[0];
-        var errorDisplay = document.getElementById('js-upload-error');
-        var submitButton = document.getElementById('form-submit-btn');
-        if (file) {
-            var maxBytes = 2 * 1024 * 1024;
-            if (file.size > maxBytes) {
-                errorDisplay.innerText = "❌ File too large (" + (file.size / (1024 * 1024)).toFixed(2) + "MB). Max allowed size is 2MB.";
-                errorDisplay.classList.remove('hidden');
-                submitButton.disabled = true;
-                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+            var emptyStateContainer = document.getElementById('search-empty-state');
+            var tableContainer = document.getElementById('inventory-table');
+
+            if (visibleRowCount === 0) {
+                if (emptyStateContainer) emptyStateContainer.classList.remove('hidden');
+                if (tableContainer) tableContainer.classList.add('hidden');
             } else {
-                errorDisplay.innerText = "";
-                errorDisplay.classList.add('hidden');
-                submitButton.disabled = false;
-                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (emptyStateContainer) emptyStateContainer.classList.add('hidden');
+                if (tableContainer) tableContainer.classList.remove('hidden');
             }
-        }
-    });
-
-    // Global scopes functions for button interface interaction hooks
-    function populateEditForm(product) {
-        document.getElementById('form-title').innerText = 'Modify Existing Product';
-        document.getElementById('action_type').value = 'update';
-        document.getElementById('product_id').value = product.id;
-        document.getElementById('existing_image').value = product.image;
-        document.getElementById('form-name').value = product.name;
-        document.getElementById('form-price').value = product.price;
-        document.getElementById('form-description').value = product.description || '';
-        document.getElementById('form-image-file').required = true;
-        document.getElementById('edit-img-note').classList.remove('hidden');
-        document.getElementById('form-submit-btn').innerText = 'Save Modifications';
-        document.getElementById('form-cancel-btn').classList.remove('hidden');
-        document.getElementById('form-title').scrollIntoView({
-            behavior: 'smooth'
         });
     }
 
-    function resetFormState() {
-        document.getElementById('form-title').innerText = 'Add New Product';
-        document.getElementById('action_type').value = 'create';
-        document.getElementById('product_id').value = '';
-        document.getElementById('existing_image').value = '';
-        document.getElementById('form-name').value = '';
-        document.getElementById('form-price').value = '';
-        document.getElementById('form-description').value = '';
-        document.getElementById('form-image-file').value = '';
-        document.getElementById('form-image-file').required = true;
-        document.getElementById('edit-img-note').classList.add('hidden');
-        document.getElementById('js-upload-error').classList.add('hidden');
-        document.getElementById('form-submit-btn').innerText = 'Insert Product Row';
-        document.getElementById('form-cancel-btn').classList.add('hidden');
-        document.getElementById('form-submit-btn').disabled = false;
-        document.getElementById('form-submit-btn').classList.remove('opacity-50', 'cursor-not-allowed');
+    // Run search immediately and bind to readyState to avoid initialisation lag
+    runCatalogSearch();
+    document.addEventListener('DOMContentLoaded', runCatalogSearch);
+
+    // --- 4. CLIENT-SIDE LOCAL FILE SIZE SECURITY VALIDATOR (2MB Limit) ---
+    var fileInput = document.getElementById('form-image-file');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            var file = this.files[0]; // Capture the active single file item descriptor
+            var errorDisplay = document.getElementById('js-upload-error');
+            var submitButton = document.getElementById('form-submit-btn');
+            
+            if (file && errorDisplay && submitButton) {
+                var maxBytes = 2 * 1024 * 1024; // Strict 2 Megabyte calculation threshold
+                
+                if (file.size > maxBytes) {
+                    errorDisplay.innerText = "❌ File too large (" + (file.size / (1024 * 1024)).toFixed(2) + "MB). Max allowed size is 2MB.";
+                    errorDisplay.classList.remove('hidden');
+                    submitButton.disabled = true;
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    errorDisplay.innerText = "";
+                    errorDisplay.classList.add('hidden');
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        });
     }
 </script>

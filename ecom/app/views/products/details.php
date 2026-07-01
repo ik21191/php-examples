@@ -8,6 +8,7 @@ $isWishlisted = in_array($product['id'], $favoriteIds);
 // Unpack average metrics rating score trends logic parameters
 $avgRating = isset($ratingStats['avg_rating']) ? round((float)$ratingStats['avg_rating'], 1) : 0;
 $totalReviews = isset($ratingStats['total_count']) ? (int)$ratingStats['total_count'] : 0;
+$productStock = isset($product['stock']) ? (int)$product['stock'] : 0;
 ?>
 
 <div class="max-w-5xl mx-auto space-y-10">
@@ -41,7 +42,15 @@ $totalReviews = isset($ratingStats['total_count']) ? (int)$ratingStats['total_co
 
                 <div class="border-y border-gray-100 py-3 flex items-baseline space-x-3">
                     <span class="text-3xl font-black text-blue-600">₹<?= number_format($product['price'], 2); ?></span>
-                    <span class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 font-bold uppercase">In Stock</span>
+                    <div>
+                        <?php if ($productStock <= 0): ?>
+                            <span class="inline-block bg-red-50 text-red-600 border border-red-100 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Out of Stock 🚨</span>
+                        <?php elseif ($productStock <= 3): ?>
+                            <span class="inline-block bg-amber-50 text-amber-600 border border-amber-100 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">Low Stock (<?= $productStock; ?> Left) ⚠️</span>
+                        <?php else: ?>
+                            <span class="inline-block bg-green-50 text-green-700 border border-green-100 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider">In Stock Available</span>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="space-y-1.5">
@@ -50,12 +59,31 @@ $totalReviews = isset($ratingStats['total_count']) ? (int)$ratingStats['total_co
                 </div>
             </div>
 
+            <!--
             <div class="pt-6 border-t border-gray-100 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <a href="/customer/add-to-cart?id=<?= $product['id'] ?>" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm flex items-center justify-center space-x-2">
                     <span>Add to Shop Cart 🛒</span>
                 </a>
                 <a href="/" class="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 px-4 rounded-xl transition text-sm">Back to Catalog</a>
             </div>
+            -->
+
+            <div class="pt-6 border-t border-gray-100 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <?php if ($productStock <= 0): ?>
+                    <!-- Disabled State if product reaches 0 quantity -->
+                    <button disabled class="w-full text-center bg-gray-200 text-gray-400 font-bold py-3.5 px-4 rounded-xl cursor-not-allowed text-sm uppercase tracking-wide shadow-inner">
+                        Sold Out 🚫
+                    </button>
+                <?php else: ?>
+                    <a href="/customer/add-to-cart?id=<?= $product['id'] ?>" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm flex items-center justify-center space-x-2">
+                        <span>Add to Shop Cart 🛒</span>
+                    </a>
+                <?php endif; ?>
+                
+                <a href="/" class="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 px-4 rounded-xl transition text-sm flex items-center justify-center">Back to Catalog</a>
+            </div>
+
+
         </div>
     </div>
 
