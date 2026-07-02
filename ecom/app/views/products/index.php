@@ -50,7 +50,7 @@ $favoriteIds = Wishlist::getUserWishlistIds($userId);
                                 <?= htmlspecialchars($product['name']) ?>
                             </a>
                         </h2>
-                        <p class="text-xl font-bold text-gray-900">Rh. <?= number_format($product['price'], 2) ?></p>
+                        <p class="text-xl font-bold text-gray-900">₹ <?= number_format($product['price'], 2) ?></p>
                     </div>
                     <div class="mt-4">
                         <?php if (isset($product['stock']) && $product['stock'] <= 0): ?>

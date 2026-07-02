@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP MVC Responsive Store</title>
+    <title>Anaiza Gift </title>
+    <meta name="robots" content="noindex">
     <script src="/js/chart.umd.js"></script>
 </head>
 
@@ -12,7 +13,7 @@
 
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-xl font-bold tracking-tight text-blue-600">MVC_SHOP</a>
+            <a href="/" class="text-xl font-bold tracking-tight text-blue-600">Anaiza Gifts</a>
 
             <div class="flex space-x-6 items-center">
                 <a href="/" class="text-gray-600 hover:text-gray-900 transition text-sm font-medium">Products</a>
@@ -92,7 +93,7 @@
 </script>
 
     <footer class="bg-white border-t border-gray-100 py-6 text-center text-sm text-gray-500 mt-12">
-        <p>&copy; <?= date('Y') ?> Minimal PHP MVC E-Commerce Application.</p>
+        <p>&copy; <?= date('Y') ?> Anaiza Gifts. All rights reserved.</p>
     </footer>
 </body>
 

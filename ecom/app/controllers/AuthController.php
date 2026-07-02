@@ -52,6 +52,8 @@ class AuthController {
                 $error = 'Registration failed. Please try again.';
             }
         }
+        $view = __DIR__ . '/../views/auth/register.php';
+        require_once __DIR__ . '/../views/layout/header.php';
     }
 
     public function logout() {

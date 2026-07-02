@@ -59,15 +59,6 @@ $productStock = isset($product['stock']) ? (int)$product['stock'] : 0;
                 </div>
             </div>
 
-            <!--
-            <div class="pt-6 border-t border-gray-100 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <a href="/customer/add-to-cart?id=<?= $product['id'] ?>" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl transition shadow-sm text-sm flex items-center justify-center space-x-2">
-                    <span>Add to Shop Cart 🛒</span>
-                </a>
-                <a href="/" class="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3.5 px-4 rounded-xl transition text-sm">Back to Catalog</a>
-            </div>
-            -->
-
             <div class="pt-6 border-t border-gray-100 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <?php if ($productStock <= 0): ?>
                     <!-- Disabled State if product reaches 0 quantity -->

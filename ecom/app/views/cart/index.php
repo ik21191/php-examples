@@ -17,7 +17,7 @@
             ?>
                 <div class="flex items-center justify-between border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                     <div class="flex items-center space-x-4">
-                        <img src="<?= $item['image'] ?>" class="w-16 h-16 object-cover rounded-lg bg-gray-50">
+                        <img src="/<?= $item['image'] ?>" class="w-16 h-16 object-cover rounded-lg bg-gray-50">
                         <div>
                             <h3 class="font-semibold text-gray-800 text-sm md:text-base"><?= htmlspecialchars($item['name']) ?></h3>
                             <p class="text-gray-500 text-sm">₹<?= number_format($item['price'], 2) ?> x <?= $item['quantity'] ?></p>
