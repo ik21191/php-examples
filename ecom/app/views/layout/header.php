@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anaiza Gift </title>
     <meta name="robots" content="noindex">
-    <script src="/js/chart.umd.js"></script>
+    <link rel="stylesheet" href="/js/tailwind.css">
 </head>
 
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800">

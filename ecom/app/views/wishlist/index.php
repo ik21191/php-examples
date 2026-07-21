@@ -25,7 +25,7 @@
                     </a>
 
                     <div class="h-48 overflow-hidden bg-gray-100">
-                        <img src="<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover">
+                        <img src="/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover">
                     </div>
                     
                     <div class="p-5 flex-grow flex flex-col justify-between">
