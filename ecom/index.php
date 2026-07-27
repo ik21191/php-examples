@@ -53,6 +53,11 @@ $router->get('/customer/orders', 'ProfileController@orders');
 $router->post('/customer/add-product-review', 'ReviewController@add');
 $router->get('/customer/download-invoice', 'InvoiceController@download');
 
+//customer profile
+$router->get('/customer/profile', 'ProfileController@fetchProfile');
+$router->post('/customer/update-profile', 'ProfileController@updateProfile');
+
+
 //admin
 $router->get('/admin/dashboard', 'AdminController@dashboard');
 $router->post('/admin/products', 'AdminController@products');
