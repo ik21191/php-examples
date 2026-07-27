@@ -23,6 +23,11 @@ $router->post('/customer/authenticate', 'AuthController@authenticate');
 $router->get('/customer/register-form', 'AuthController@registerForm');
 $router->post('/customer/register-user', 'AuthController@register');
 $router->get('/customer/logout', 'AuthController@logout');
+//customer forgot password
+$router->get('/customer/forgot-password-form', 'AuthController@forgotPasswordForm');
+$router->post('/customer/generate-reset-password-link', 'AuthController@generateResetPasswordLink');
+$router->get('/customer/verify-reset-password-link', 'AuthController@verifyResetPasswordLink');
+$router->post('/customer/reset-password', 'AuthController@resetPassword');
 
 
 $router->get('/product/product-details', 'ProductController@productDetails');

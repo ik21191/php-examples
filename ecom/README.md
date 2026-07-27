@@ -1,6 +1,9 @@
 # E-Commerce
 A sample demo application showing the E-Commerce order flow.
 
+# robots.txt
+- Currently disallow all the traffic
+
 ## Steps to run this application
 
 - Create a `.env` file and put in the root folder of this application. For your convenience a `.env-sample` is placed in the `root` folder. In the production server replace sample value with the actual one. In case you add a new property in `.env` file, then make sure to add a placeholder in `.env-sample` file.
@@ -50,3 +53,6 @@ To enable `PDO MySql` extension in your `php`, follow below steps.
 ```
 iniextension=pdo_mysql
 ```
+
+# Steps to build tailwind css
+## TODO
